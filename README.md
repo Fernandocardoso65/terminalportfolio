@@ -3,7 +3,7 @@
 Este é um projeto de currículo gamificado desenvolvido em HTML/CSS/JS, simulando um terminal de linha de comando (CLI). O objetivo é demonstrar minhas competências em **Infraestrutura e Segurança da Informação** de uma forma interativa e criativa.
 
 ## 🚀 Como visualizar
-Você pode acessar a versão interativa aqui: 
+Você pode acessar a versão interativa aqui: https://curriculofernandocardoso.netlify.app/
 
 ## 🛠️ Tecnologias Utilizadas
 - **HTML5**: Estruturação semântica.
