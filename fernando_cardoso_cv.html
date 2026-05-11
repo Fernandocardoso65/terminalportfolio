@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fernando Cardoso - Terminal Quest</title>
+    <style>
+        body { background: #0a0c10; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        
+        .terminal-window { width: 90%; max-width: 750px; box-shadow: 0 0 20px rgba(35, 134, 54, 0.3); }
+        .window-bar { background: #30363d; padding: 10px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; border: 2px solid #238636; border-bottom: none; }
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; }
+        .exit-btn { background: #ff5f56; } 
+        .min-btn { background: #ffbd2e; }
+        .max-btn { background: #27c93f; }
+        .title { color: #8b949e; font-size: 12px; }
+
+        #terminal { background: #161b22; height: 75vh; border: 2px solid #238636; border-radius: 0 0 8px 8px; padding: 20px; overflow-y: auto; }
+        
+        .input-line { display: flex; align-items: center; margin-top: 10px; }
+        input { background: transparent; border: none; color: #fff; font-family: inherit; font-size: 16px; outline: none; width: 100%; margin-left: 10px; }
+        .output { margin-bottom: 10px; line-height: 1.6; }
+        .highlight { color: #f0883e; font-weight: bold; }
+        .green { color: #238636; }
+        .stat-bar { background: #30363d; height: 10px; border-radius: 5px; width: 200px; display: inline-block; vertical-align: middle; }
+        .fill { background: #00ff41; height: 100%; box-shadow: 0 0 10px #00ff41; border-radius: 5px; }
+        hr { border: 0; border-top: 1px solid #30363d; margin: 15px 0; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        #shutdown { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #00ff41; justify-content: center; align-items: center; flex-direction: column; z-index: 1000; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="shutdown">
+    <h1>SESSÃO ENCERRADA</h1>
+    <p>Conexão terminada com sucesso. Obrigado pelo seu interesse!</p>
+    <p style="font-size: 12px; color: #666;">Pressione F5 para reiniciar o sistema.</p>
+</div>
+
+<div class="terminal-window">
+    <div class="window-bar">
+        <div class="dots">
+            <button class="dot exit-btn" onclick="closeTerminal()" title="Sair"></button>
+            <div class="dot min-btn"></div>
+            <div class="dot max-btn"></div>
+        </div>
+        <div class="title">fernando_cardoso_cv.sh</div>
+        <div></div>
+    </div>
+
+    <div id="terminal">
+        <div id="output-area">
+            <div class="output">/***********************************************************
+* SISTEMA DE RECRUTAMENTO V1.0 - FERNANDO CARDOSO
+* STATUS: ONLINE - AGUARDANDO COMANDOS
+***********************************************************/</div>
+            <div class="output">Digite <span class="highlight">'help'</span> para listar as missões ou <span class="highlight">'exit'</span> para sair.</div>
+        </div>
+        
+        <div class="input-line">
+            <span>$</span>
+            <input type="text" id="command-input" autofocus autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('command-input');
+    const outputArea = document.getElementById('output-area');
+    const shutdownScreen = document.getElementById('shutdown');
+
+    function closeTerminal() {
+        shutdownScreen.style.display = 'flex';
+    }
+
+    const responses = {
+        'help': `Comandos disponíveis: <br>
+                - <span class="highlight">profile</span>: Ver perfil do jogador <br>
+                - <span class="highlight">skills</span>: Ver árvore de talentos<br>
+                - <span class="highlight">xp</span>: Ver missões completadas (Experiência)<br>
+                - <span class="highlight">projects</span>: Ver projetos web desenvolvidos<br>
+                - <span class="highlight">contact</span>: Iniciar chat com o jogador<br>
+                - <span class="highlight">exit</span>: Encerrar sistema`,
+        
+        'profile': `<strong>JOGADOR:</strong> Fernando Cardoso<br>
+                    <strong>CLASSE:</strong> Desenvolvedor Web & Analista de Suporte<br>
+                    <strong>LEVEL:</strong> 4 anos de experiência corporativa<br>
+                    <strong>QUEST ATUAL:</strong> Cursando Segurança da Informação (FAM 2025-2027)`,
+        
+        'skills': `<strong>ATRIBUTOS TÉCNICOS:</strong><br>
+                  Suporte N1/N2: <div class="stat-bar"><div class="fill" style="width: 95%;"></div></div> 95%<br>
+                  Desenvolvimento Web: <div class="stat-bar"><div class="fill" style="width: 85%;"></div></div> 85%<br>
+                  Segurança/Firewall: <div class="stat-bar"><div class="fill" style="width: 80%;"></div></div> 80%<br><br>
+                  <strong>INVENTÁRIO (ITEMS):</strong><br>
+                  ✦ FortiGate Firewall <br>✦ Cisco Junior Cyber Analyst <br>✦ ITIL 4 & Scrum`,
+        
+        'xp': `<strong>MISSÕES COMPLETADAS:</strong><br>
+               - <strong>PRODESP</strong> <span style="color:#8b949e">(até Abr/2026)</span>: Analista de Suporte N2 - Atendimento em sistemas corporativos, Office 365, antivírus e backups.<br>
+               - <strong>PROVER SOLUÇÕES:</strong> Suporte em infraestrutura e configuração de equipamentos.<br>
+               - <strong>NET SUPPORT:</strong> Manutenção de redes, hardware e software.<br>
+               - <strong>VALID:</strong> Operação de sistemas e validação biométrica.`,
+
+        'projects': `<strong>PROJETOS WEB DESENVOLVIDOS:</strong><br><br>
+                    🚛 <strong>Rota Transportes</strong><br>
+                    &nbsp;&nbsp;<a href="https://rotatransportes.vercel.app/" target="_blank">https://rotatransportes.vercel.app/</a><br><br>
+                    💧 <strong>Hidromapa Brasil</strong><br>
+                    &nbsp;&nbsp;<a href="https://www.hidromapabrasil.com.br/" target="_blank">https://www.hidromapabrasil.com.br/</a><br><br>
+                    📚 <strong>Despertar Literário</strong><br>
+                    &nbsp;&nbsp;<a href="https://despertarliterario.netlify.app/" target="_blank">https://despertarliterario.netlify.app/</a>`,
+        
+        'contact': `<strong>DADOS DE CONEXÃO:</strong><br>
+                    📱 Telefone: (15) 98138-0490<br>
+                    📧 E-mail: fernandoquimica2014@gmail.com<br>
+                    📍 Local: Sorocaba/SP`
+    };
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const cmd = input.value.toLowerCase().trim();
+            
+            if (cmd === 'exit') {
+                closeTerminal();
+                return;
+            }
+
+            const response = responses[cmd] || `Comando '${cmd}' não reconhecido. Digite 'help'.`;
+            
+            outputArea.innerHTML += `<div class="output"><span class="green">$ ${cmd}</span><br>${response}</div><hr>`;
+            input.value = '';
+            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        }
+    });
+</script>
+
+</body>
+</html>
